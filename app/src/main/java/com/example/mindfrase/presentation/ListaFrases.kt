@@ -2,6 +2,8 @@ package com.example.mindfrase.presentation
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +20,7 @@ import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,6 +34,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,6 +54,17 @@ fun ListaFrases(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    listOf(
+                        Color(0xFF010332),
+                        Color(0xFF100328),
+                        Color(0xFF29011C),
+                        Color(0xFF43000D),
+                        Color(0xFF530005),
+                    )
+                )
+            )
     ) {
         TopAppBar(
             title = { Text(text = "Mis frases") }
@@ -74,6 +90,15 @@ fun FraseItem(
     onCompartir: () -> Unit
 ) {
     Card(
+        border = BorderStroke(
+            4.dp,
+            Brush.linearGradient(
+                colors = listOf(Color.Cyan, Color.Magenta, Color.Blue)
+            )
+        ),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent
+        ),
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
