@@ -1,5 +1,7 @@
 package com.example.mindfrase.presentation
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,9 +24,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -82,24 +88,14 @@ fun FraseItem(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                IconButton(onClick = onFavorito) {
-                    Icon(
-                        if (frase.esFavorita)
-                            Icons.Default.Favorite
-                        else Icons.Default.FavoriteBorder,
-                        contentDescription = "Favorito"
-                    )
-                }
+                FavoritoButton(esFavorita = frase.esFavorita) { onFavorito() }
                 BadgedBox(badge = {
                     if (frase.likes > 0) {
                         Badge { Text(frase.likes.toString()) }
                     }
                 }) {
-                    IconButton(onClick = onLike) {
-                        Icon(
-                            Icons.Default.ThumbUp,
-                            contentDescription = "Favorito"
-                        )
+                    LikeButton(likes = frase.likes) {
+                        onLike()
                     }
                 }
                 IconButton(onClick = onCompartir) {
@@ -110,5 +106,42 @@ fun FraseItem(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun FavoritoButton(esFavorita: Boolean, onFavorito: () -> Unit) {
+    val scale = remember { androidx.compose.animation.core.Animatable(1f) }
+    LaunchedEffect(esFavorita) {
+        scale.animateTo(
+            targetValue = 1.8f,
+            animationSpec = tween(durationMillis = 150, easing = FastOutSlowInEasing)
+        )
+        scale.animateTo(1f, animationSpec = tween(durationMillis = 150))
+    }
+    IconButton(onClick = onFavorito) {
+        Icon(
+            if (esFavorita)
+                Icons.Default.Favorite
+            else Icons.Default.FavoriteBorder,
+            contentDescription = "Favorito",
+            modifier = Modifier.scale(scale.value)
+        )
+    }
+}
+
+@Composable
+fun LikeButton(likes: Int, onLike: () -> Unit) {
+    val rotation = remember { androidx.compose.animation.core.Animatable(360f) }
+    LaunchedEffect(likes) {
+        rotation.animateTo(0f, animationSpec = tween(700))
+        rotation.snapTo(360f)
+    }
+    IconButton(onClick = onLike) {
+        Icon(
+            Icons.Default.ThumbUp,
+            contentDescription = "Like",
+            modifier = Modifier.rotate(rotation.value)
+        )
     }
 }
