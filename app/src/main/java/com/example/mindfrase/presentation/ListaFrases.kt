@@ -39,16 +39,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mindfrase.domain.model.Frase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListaFrases(
     modifier: Modifier,
-    viewModel: FrasesViewModel = viewModel()
+    viewModel: FrasesViewModel = hiltViewModel()
 ) {
-    val frases by viewModel.frases.collectAsState()
+    val frases by viewModel.frases.collectAsState(initial = emptyList())
     val context = LocalContext.current
 
     Column(
@@ -73,8 +73,12 @@ fun ListaFrases(
             itemsIndexed(frases) { index, frase ->
                 FraseItem(
                     frase,
-                    onFavorito = { viewModel.toggleFavorito(index) },
-                    onLike = { viewModel.darLike(index) },
+                    onFavorito = {
+                        viewModel.toggleFavorito(frase)
+                    },
+                    onLike = {
+                        viewModel.darLike(frase)
+                    },
                     onCompartir = { viewModel.compartirFrase(frase.texto, context) }
                 )
             }
