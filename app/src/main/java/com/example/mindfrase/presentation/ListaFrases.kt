@@ -43,13 +43,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.mindfrase.domain.model.Frase
+import com.example.mindfrase.navigation.NavScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListaFrases(
     modifier: Modifier,
-    viewModel: FrasesViewModel = hiltViewModel()
+    viewModel: FrasesViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val frases by viewModel.frases.collectAsState(initial = emptyList())
     val context = LocalContext.current
@@ -73,7 +76,11 @@ fun ListaFrases(
             title = { Text(text = "Mis frases") }
         )
         Button(
-            onClick = {},
+            onClick = {
+                navController.navigate(
+                    NavScreens.NuevaFrase.name,
+                )
+            },
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()

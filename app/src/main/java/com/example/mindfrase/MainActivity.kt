@@ -11,7 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.mindfrase.presentation.ListaFrases
+import androidx.navigation.compose.rememberNavController
+import com.example.mindfrase.navigation.FrasesNavigation
 import com.example.mindfrase.ui.theme.MindFraseTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,10 +23,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MindFraseTheme {
+                val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ListaFrases(
-                        modifier = Modifier
-                            .padding(innerPadding)
+                    FrasesNavigation(
+                        navController = navController,
+                        modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
