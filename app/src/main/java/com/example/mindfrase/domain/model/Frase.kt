@@ -11,4 +11,5 @@ data class Frase(
     val texto: String,
     val esFavorita: Boolean,
     val likes: Int,
+    val categoria: String, // campo agregado despues de modelo inicial
 )

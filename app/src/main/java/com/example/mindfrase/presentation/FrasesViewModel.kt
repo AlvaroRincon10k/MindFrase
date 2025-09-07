@@ -2,8 +2,8 @@ package com.example.mindfrase.presentation
 
 import android.content.Context
 import android.content.Intent
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,7 +20,7 @@ class FrasesViewModel @Inject constructor(
 ) : ViewModel() {
 
     val frases = fraseRepository.getFrasesFromRoom()
-    var frase by mutableStateOf(Frase(0, "", false, 0))
+    var frase by mutableStateOf(Frase(0, "", false, 0, "General"))
 
     fun toggleFavorito(frase: Frase) = viewModelScope.launch(Dispatchers.IO) {
         val nuevaFrase = frase.copy(esFavorita = !frase.esFavorita)

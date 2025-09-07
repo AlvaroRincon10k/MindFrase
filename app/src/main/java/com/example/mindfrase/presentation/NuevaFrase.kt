@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -37,6 +40,10 @@ fun NuevaFrase(
     var textoFrase by remember {
         mutableStateOf("")
     }
+    var categoria by remember { mutableStateOf("") }
+    val categorias = listOf("Motivacion", "Resiliencia", "Amor", "Sabiduria", "General")
+    var expanded by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -62,7 +69,40 @@ fun NuevaFrase(
                 onValueChange = { textoFrase = it },
                 label = {
                     Text("Escribe una frase")
-                })
+                },
+                modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.height(16.dp))
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = it }
+            ) {
+                TextField(
+                    value = categoria,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Categoria") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                    },
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                )
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }) {
+                    categorias.forEach { cat ->
+                        DropdownMenuItem(
+                            text = { Text(text = cat) },
+                            onClick = {
+                                categoria = cat
+                                expanded = false
+                            }
+                        )
+                    }
+
+                }
+            }
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = {
                 if (textoFrase.isNotBlank()) {
@@ -71,6 +111,7 @@ fun NuevaFrase(
                         texto = textoFrase,
                         esFavorita = false,
                         likes = 0,
+                        categoria = categoria
                     )
                     viewModel.addFrase(nuevaFrase)
                     navController.navigateUp()

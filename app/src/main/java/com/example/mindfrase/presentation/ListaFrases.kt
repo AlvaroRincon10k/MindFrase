@@ -156,6 +156,12 @@ fun FraseItem(
                     onEliminar = onEliminar
                 )
             }
+            Text(
+                text = "Categoria: ${frase.categoria}",
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
