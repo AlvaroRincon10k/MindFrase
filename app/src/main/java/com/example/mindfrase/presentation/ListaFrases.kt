@@ -3,7 +3,6 @@ package com.example.mindfrase.presentation
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,6 +53,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.mindfrase.domain.model.Frase
 import com.example.mindfrase.navigation.NavScreens
+import com.example.mindfrase.presentation.utils.fondoDegradado
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,17 +68,7 @@ fun ListaFrases(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    listOf(
-                        Color(0xFF010332),
-                        Color(0xFF100328),
-                        Color(0xFF29011C),
-                        Color(0xFF43000D),
-                        Color(0xFF530005),
-                    )
-                )
-            )
+            .fondoDegradado()
     ) {
         TopAppBar(
             title = { Text(text = "Mis frases") }

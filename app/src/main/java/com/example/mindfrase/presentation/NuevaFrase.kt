@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.mindfrase.domain.model.Frase
+import com.example.mindfrase.presentation.utils.bordeDegradado
+import com.example.mindfrase.presentation.utils.fondoDegradado
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,6 +49,7 @@ fun NuevaFrase(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .fondoDegradado()
     ) {
         TopAppBar(
             navigationIcon = {
@@ -70,7 +73,10 @@ fun NuevaFrase(
                 label = {
                     Text("Escribe una frase")
                 },
-                modifier = Modifier.fillMaxWidth())
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .bordeDegradado()
+            )
             Spacer(modifier = Modifier.height(16.dp))
             ExposedDropdownMenuBox(
                 expanded = expanded,
@@ -87,6 +93,7 @@ fun NuevaFrase(
                     modifier = Modifier
                         .menuAnchor()
                         .fillMaxWidth()
+                        .bordeDegradado()
                 )
                 ExposedDropdownMenu(
                     expanded = expanded,
