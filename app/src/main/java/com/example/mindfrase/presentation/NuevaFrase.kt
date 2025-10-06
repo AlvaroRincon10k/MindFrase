@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.mindfrase.domain.model.Frase
 import com.example.mindfrase.presentation.utils.bordeDegradado
+import com.example.mindfrase.presentation.utils.colorTextField
 import com.example.mindfrase.presentation.utils.fondoDegradado
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,7 +76,8 @@ fun NuevaFrase(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .bordeDegradado()
+                    .bordeDegradado(),
+                colors = colorTextField()
             )
             Spacer(modifier = Modifier.height(16.dp))
             ExposedDropdownMenuBox(
@@ -93,7 +95,8 @@ fun NuevaFrase(
                     modifier = Modifier
                         .menuAnchor()
                         .fillMaxWidth()
-                        .bordeDegradado()
+                        .bordeDegradado(),
+                    colors = colorTextField()
                 )
                 ExposedDropdownMenu(
                     expanded = expanded,

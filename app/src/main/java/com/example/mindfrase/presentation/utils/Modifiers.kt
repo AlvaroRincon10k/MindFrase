@@ -3,6 +3,8 @@ package com.example.mindfrase.presentation.utils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -29,4 +31,16 @@ fun Modifier.bordeDegradado() = this.border(
         )
     ),
     shape = RoundedCornerShape(8.dp)
+)
+
+@Composable
+fun colorTextField() = TextFieldDefaults.colors(
+    focusedContainerColor = Color.Transparent,
+    unfocusedContainerColor = Color.Transparent,
+    focusedIndicatorColor = Color.Transparent,
+    unfocusedIndicatorColor = Color.Transparent,
+    cursorColor = Color.White,
+    focusedLabelColor = Color(0xFF7F00FF),
+    unfocusedLabelColor = Color.Gray,
+    disabledLabelColor = Color.DarkGray
 )
