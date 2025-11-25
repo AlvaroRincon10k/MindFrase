@@ -1,7 +1,11 @@
 package com.example.mindfrase.presentation
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,6 +43,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,6 +59,8 @@ import androidx.navigation.NavController
 import com.example.mindfrase.domain.model.Frase
 import com.example.mindfrase.navigation.NavScreens
 import com.example.mindfrase.presentation.utils.fondoDegradado
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -114,68 +121,90 @@ fun FraseItem(
     onEditar: () -> Unit,
     onEliminar: () -> Unit
 ) {
-    Card(
-        border = BorderStroke(
-            4.dp,
-            Brush.linearGradient(
-                colors = listOf(Color.Cyan, Color.Magenta, Color.Blue)
-            )
-        ),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.Transparent
-        ),
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = frase.texto, fontSize = 18.sp,
-                    modifier = Modifier.weight(1f)
-                )
-                MenuOpciones(
-                    onEditar = onEditar,
-                    onEliminar = onEliminar
-                )
-            }
-            Text(
-                text = "Categoria: ${frase.categoria}",
-                fontSize = 14.sp,
-                color = Color.Gray
-            )
+    var visible by remember {
+        mutableStateOf(true)
+    }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+    val scope = rememberCoroutineScope()
+
+    AnimatedVisibility(
+        visible = visible,
+        exit = slideOutVertically(
+            targetOffsetY = { it }) +
+                scaleOut(targetScale = 0f) +
+                fadeOut()
+
+    ) {
+        Card(
+            border = BorderStroke(
+                4.dp,
+                Brush.linearGradient(
+                    colors = listOf(Color.Cyan, Color.Magenta, Color.Blue)
+                )
+            ),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.Transparent
+            ),
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
-                FavoritoButton(esFavorita = frase.esFavorita) { onFavorito() }
-                BadgedBox(badge = {
-                    if (frase.likes > 0) {
-                        Badge { Text(frase.likes.toString()) }
-                    }
-                }) {
-                    LikeButton(likes = frase.likes) {
-                        onLike()
-                    }
-                }
-                IconButton(onClick = onCompartir) {
-                    Icon(
-                        Icons.Default.Share,
-                        contentDescription = "Favorito"
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = frase.texto, fontSize = 18.sp,
+                        modifier = Modifier.weight(1f)
                     )
+                    MenuOpciones(
+                        onEditar = onEditar,
+                        onEliminar = {
+                            visible = false
+                            scope.launch {
+                                delay(300)
+                                onEliminar()
+                            }
+                        }
+                    )
+                }
+                Text(
+                    text = "Categoria: ${frase.categoria}",
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    FavoritoButton(esFavorita = frase.esFavorita) { onFavorito() }
+                    BadgedBox(badge = {
+                        if (frase.likes > 0) {
+                            Badge { Text(frase.likes.toString()) }
+                        }
+                    }) {
+                        LikeButton(likes = frase.likes) {
+                            onLike()
+                        }
+                    }
+                    IconButton(onClick = onCompartir) {
+                        Icon(
+                            Icons.Default.Share,
+                            contentDescription = "Favorito"
+                        )
+                    }
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun FavoritoButton(esFavorita: Boolean, onFavorito: () -> Unit) {
@@ -213,6 +242,7 @@ fun LikeButton(likes: Int, onLike: () -> Unit) {
         )
     }
 }
+
 
 @Composable
 fun MenuOpciones(
